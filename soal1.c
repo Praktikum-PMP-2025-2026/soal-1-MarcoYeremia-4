@@ -1,6 +1,10 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdbool.h>
+#include <limits.h>
+
+#define QUEUE_EMPTY INT_MIN
+
 
 typedef struct gerbong{
     int value;
@@ -65,16 +69,32 @@ bool push_back(queue *q, int value){
 void delete(queue *q, int value){
 
     gerbong *curr = q->head;
-
+    
+    if(q->head == NULL){
+        return;
+    }
+    
     while(curr!= NULL){
+        if(curr->value == value){
+            q->head = curr->next;
+            return;
+        }
         if(curr->next->value == value){
             gerbong *temp = curr->next;
             curr->next = temp->next;
             temp = NULL;
             return;
         }
+        else if(curr->next == NULL){
+            return;
+        }
+        curr = curr->next;
     }
-    curr = curr->next;
+
+    
+
+    return;
+    
 
 }
 
@@ -105,10 +125,18 @@ void print_list(queue *q, int *order2, int *jenis2){
 
     gerbong *curr = q->head;
     printf("LIST ");
+    int count = 0;
     
     while(curr != NULL){
         printf("%d ", curr->value);
+        if(curr->value != 0){
+            count += 1;
+        }
         curr = curr->next;
+    }
+
+    if(count == 0){
+        printf("EMPTY");
     }
 
     printf("\n");
